@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const moment = require("moment");
 
-/* LIST all tasks */
 /* LIST all tasks */
 router.get("/:systemid", async function (req, res, next) {
   try {
@@ -46,11 +44,11 @@ router.get("/:systemid", async function (req, res, next) {
   }
 });
 
-/* POST NEW programming language */
+/* POST NEW task */
 router.post("/:systemid", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
-    //let db = dbInst.dbConnection();
+    const moment = require("moment");
     db.run(
       `INSERT INTO task (date, systemid, uuid, previous_point_marker, current_point_marker, status, attempts) VALUES(?,?,?,?,?,?,?)`,
       [

@@ -1,1 +1,3 @@
 node_modules
+db/ci_cicd_webhook.db
+.env

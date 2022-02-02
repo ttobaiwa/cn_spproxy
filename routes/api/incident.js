@@ -80,7 +80,7 @@ router.get("/stats/:year", async function (req, res, next) {
   });
 });
 
-/* POST NEW programming language */
+/* POST NEW incident */
 router.post("/", async function (req, res, next) {
   try {
     const resp = await dbInst.createIncidentLog(req.body);

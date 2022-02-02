@@ -113,22 +113,6 @@ async function listTaskLog(selectedSystemId, selectedTaskStatus) {
 }
 
 async function processPendingTasks() {
-  let delay = 5000;
-
-  let timerId = setTimeout(function request() {
-    //...send request...
-    listTaskLog;
-
-    if (request) {
-      // increase the interval to the next run
-      delay *= 2;
-    }
-
-    timerId = setTimeout(request, delay);
-  }, delay);
-}
-
-async function test() {
   let sql = `SELECT date, systemid, uuid, previous_point_marker, current_point_marker, status FROM task WHERE status = 'pending' AND attempts < 3 ORDER BY id`;
   let db = dbConnection();
   db.all(sql, [], (err, rows) => {
@@ -153,7 +137,7 @@ async function test() {
 
         if (
           shell.exec(
-            `cd ${system_detail[0].path} && ${system_detail[0].deploy.clone}`
+            `cd ${system_detail[0].path} && ${system_detail[0].deploy.pull}`
           ).code == 0
         ) {
           // no errors - let's update the table
@@ -170,17 +154,8 @@ async function test() {
 
   console.log("done -> test()");
   db.close();
-  setTimeout(test, 5000);
+  setTimeout(processPendingTasks, 5000);
 }
-
-const searchInArray = (haystack, criteria, needle) => {
-  return haystack.filter((hay) => {
-    return criteria.some(
-      (newItem) =>
-        hay[newItem].toString().toLowerCase().indexOf(needle.toLowerCase()) > -1
-    );
-  });
-};
 
 /* ---------- INCIDENT LOGS ---------- */
 
@@ -248,7 +223,7 @@ async function listIncidentLogs(selectedYear) {
   db.close();
 }
 
-/* ---------- AUXILARY DB CONNECTION ---------- */
+/* ---------- AUXILARY FUNCTIONS ---------- */
 function dbConnection() {
   return new sqlite3.Database(
     "./db/ci_cicd_webhook.db",
@@ -262,6 +237,15 @@ function dbConnection() {
   );
 }
 
+const searchInArray = (haystack, criteria, needle) => {
+  return haystack.filter((hay) => {
+    return criteria.some(
+      (newItem) =>
+        hay[newItem].toString().toLowerCase().indexOf(needle.toLowerCase()) > -1
+    );
+  });
+};
+
 module.exports = {
   createTaskLog,
   updateTaskLog,
@@ -271,5 +255,5 @@ module.exports = {
   listIncidentLogs,
   createDatabase,
   dbConnection,
-  test,
+  test: processPendingTasks,
 };

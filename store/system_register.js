@@ -1,13 +1,13 @@
 const system_register = [
   {
-    id: "1234",
+    id: "33354436",
     name: "expressjs",
     url: "ndJzJnSjujcCpvkh",
-    path: "/Users/tarirotobaiwa/Desktop/test",
+    path: "/Users/tarirotobaiwa/Desktop/test/dev",
     deploy: {
       clone:
         "git clone https://cicdpipe:kySkup-4mavxy-kehved@gitlab.com/vanka1/dev.git",
-      pull: "git pull https://cicdpipe:kySkup-4mavxy-kehved@gitlab.com/vanka1/dev.git",
+      pull: "git stash && git pull https://cicdpipe:kySkup-4mavxy-kehved@gitlab.com/vanka1/dev.git",
     },
   },
 ];
