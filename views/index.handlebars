@@ -1,0 +1,358 @@
+<div class="col-lg-8 mx-auto p-3 py-md-5">
+  <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+      <img src="img/3d.png" width="40" height="40" class="me-2" viewBox="0 0 118 94" role="img" />
+      <span class="fs-4">&nbsp;<small>{{title}}</small></span>
+    </a>
+  </header>
+  <main>
+
+    <div class="container col-xxl-12 px-0 py-1">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          {{!-- <img src="bootstrap-themes.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700"
+            height="500" loading="lazy"> --}}
+          <svg width="400" height="400" font-family="sans-serif" font-size="10"
+            class="d-block mx-lg-auto img-fluid"></svg>
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold lh-1 mb-3">Perfomance Overview</h1>
+          <p><small>Quickly and easily get started with Bootstrap's compiled,
+              production-ready files with this barebones example featuring some basic
+              HTML and helpful links. Download all our examples to get started.</small></p>
+
+          <div class="mb-5">
+
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
+              id="heatmap-5-wkday">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" onclick="yearSelected(2019)"
+                autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio1">2019</label>
+
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="yearSelected(2020)"
+                autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio2">2020</label>
+
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="yearSelected(2021)"
+                autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3">2021</label>
+
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio4" onclick="yearSelected(2022)"
+                autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio4">2022</label>
+            </div>
+
+            <div class="row my-4">
+              <div class="col">
+                <div id="heatmap-5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-5">
+
+      <div class="container px-4 py-5" id="icon-grid">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Deployment History</h1>
+        <hr>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+          <div class="col d-flex align-items-start">
+            <div>
+              <h5 class="fw-bold mb-0" id="timeLapsed">00:00:00</h5>
+              <p><small>Uptime</small></p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h5 class="fw-bold mb-0">{{version}}</h5>
+              <p><small>Version</small></p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h5 class="fw-bold mb-0">Featured title</h5>
+              <p><small>Paragraph of text beneath the heading to explain the heading.</small></p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h5 class="fw-bold mb-0">Featured title</h5>
+              <p><small>Paragraph of text beneath the heading to explain the heading.</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="pt-2 my-5 text-muted border-top">
+    <small>Created by Tariro Tobaiwa &middot; &copy; 2021</small>
+  </footer>
+</div>
+
+<script>
+  d3.select("p").style("color", "green");
+  setInterval("timeLapsed()", 1000);
+  window.onload = timeLapsed();
+
+  var currentYear = new Date().getFullYear();
+  yearSelected(currentYear);
+
+  var selectedMonth = new Date().getMonth();
+
+  function timeLapsed() {
+    const then = moment(`{{uptime}}`);
+    const now = moment().format('DD/MM/YYYY HH:mm:ss');
+    const timeLapsed = moment.utc(moment(now, "DD/MM/YYYY HH:mm:ss").diff(moment(then, "DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss")
+    document.getElementById("timeLapsed").innerHTML = timeLapsed;
+  }
+
+  function yearSelected(selectedYear) {
+    $.ajax({
+      type: "get", url:
+        "http://localhost:8080/api/incident/stats/" + selectedYear, datatype: "json", success: function
+          (resp) {
+          if (!resp.error) {
+
+            var incidents = [];
+            var tasks = [];
+            var date_pos_track = [];
+
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+
+            // let's sort the incidents by date
+            for (i = 0; i < resp.data.incidents.length; i++) {
+
+              const current_date = resp.data.incidents[i].date.slice(0, 10);
+              let current_count = 0;
+
+              if (!incidents[current_date]) {
+                incidents[current_date] = [];
+                date_pos_track.push(current_date);
+                current_count = 1;
+              } else {
+                current_count = incidents[current_date].count + 1;
+              }
+
+              const log = { count: parseInt(current_count), date: resp.data.incidents[i].date.slice(0, 10) };
+              incidents[current_date] = log;
+
+            }
+
+            var sorted_incidents = [];
+            for (let date_pos of date_pos_track) {
+              sorted_incidents.push(incidents[date_pos]);
+            }
+
+            $("#heatmap-5").CalendarHeatmap('updateDates', []);
+            $("#heatmap-5").CalendarHeatmap('appendDates', sorted_incidents);
+
+          }
+        }
+    });
+  }
+
+  $("#heatmap-5").CalendarHeatmap([], {
+    title: "",
+    coloring: "viridis",
+    legend: {
+      divider: " - "
+    },
+    labels: {
+      days: true,
+      custom: {
+        weekDayLabels: "dd"
+      }
+    }
+  });
+
+  function selectedMonthToProcess(selectedCalendarMonth) {
+    const dayCount = daysInMonth(getMonthPos(selectedCalendarMonth) + 1, currentYear);
+    var monthSummary = [];
+    for (i = 1; i < dayCount + 1; i++) {
+
+      col_1 = getRndInteger();
+      col_2 = getRndInteger();
+      col_3 = getRndInteger();
+      col_4 = getRndInteger();
+      col_5 = getRndInteger();
+      col_6 = getRndInteger();
+      col_7 = getRndInteger();
+
+      monthSummary.push({
+        "Day": i,
+        "Under 5 Years": col_1,
+        "5 to 13 Years": col_2,
+        "14 to 17 Years": col_3,
+        "18 to 24 Years": col_4,
+        "25 to 44 Years": col_5,
+        "45 to 64 Years": col_6,
+        "65 Years and Over": col_7,
+        "total": (col_1 + col_2 + col_3 + col_4 + col_5 + col_6 + col_7)
+      });
+    }
+
+    const columns = ["Day",
+      "Under 5 Years",
+      "5 to 13 Years",
+      "14 to 17 Years",
+      "18 to 24 Years",
+      "25 to 44 Years",
+      "45 to 64 Years",
+      "65 Years and Over",
+      "total"];
+
+    monthSummary["columns"] = columns;
+
+    console.log('summary ', monthSummary);
+    reDrawGraph(monthSummary);
+
+  }
+
+  function getRndInteger() {
+    return Math.floor(Math.random() * 2000) + 1;;
+  }
+
+  function daysInMonth(month, year) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  function getMonthPos(selectedMonth) {
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return monthNames.indexOf(selectedMonth);
+  }
+
+
+</script>
+
+<script src="js/d3-scale-radial.js"></script>
+<script>
+
+  function reDrawGraph(csv) {
+
+
+    d3.selectAll("svg > *").remove();
+    var svg = d3.select("svg"),
+      width = +svg.attr("width"),
+      height = +svg.attr("height"),
+      innerRadius = 180,
+      outerRadius = Math.min(width, height) / 2,
+      g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+    var x = d3.scaleBand()
+      .range([0, 2 * Math.PI])
+      .align(0);
+
+    var y = d3.scaleRadial()
+      .range([innerRadius, outerRadius]);
+
+    var z = d3.scaleOrdinal()
+      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    d3.csv("data/data.csv", function (d, i, columns) {
+      for (i = 1, t = 0; i < columns.length; ++i)
+        t += d[columns[i]] = +d[columns[i]];
+      d.total = t;
+      return d;
+
+    }, function (error, data) {
+
+      if (error) throw error;
+
+
+      console.log('data => ', data);
+
+      data = csv;
+
+      console.log('data => ', data);
+
+
+      x.domain(data.map(function (d) { return d.Day; }));
+      y.domain([0, d3.max(data, function (d) { return d.total; })]);
+      z.domain(data.columns.slice(1));
+
+      g.append("g")
+        .selectAll("g")
+        .data(d3.stack().keys(data.columns.slice(1))(data))
+        .enter().append("g")
+        .attr("fill", function (d) { return z(d.key); })
+        .selectAll("path")
+        .data(function (d) { return d; })
+        .enter().append("path")
+        .attr("d", d3.arc()
+          .innerRadius(function (d) { return y(d[0]); })
+          .outerRadius(function (d) { return y(d[1]); })
+          .startAngle(function (d) { return x(d.data.Day); })
+          .endAngle(function (d) { return x(d.data.Day) + x.bandwidth(); })
+          .padAngle(0.01)
+          .padRadius(innerRadius));
+
+      var label = g.append("g")
+        .selectAll("g")
+        .data(data)
+        .enter().append("g")
+        .attr("text-anchor", "middle")
+        .attr("transform", function (d) { return "rotate(" + ((x(d.Day) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")translate(" + innerRadius + ",0)"; });
+
+      label.append("line")
+        .attr("x2", -5)
+        .attr("stroke", "#000");
+
+      label.append("text")
+        .attr("transform", function (d) { return (x(d.Day) + x.bandwidth() / 2 + Math.PI / 2) % (2 * Math.PI) < Math.PI ? "rotate(90)translate(0,16)" : "rotate(-90)translate(0,-9)"; })
+        .text(function (d) { return d.Day; });
+
+      var yAxis = g.append("g")
+        .attr("text-anchor", "middle");
+
+      var yTick = yAxis
+        .selectAll("g")
+        .data(y.ticks(5).slice(1))
+        .enter().append("g");
+
+      yTick.append("circle")
+        .attr("fill", "none")
+        .attr("stroke", "#000")
+        .attr("r", y);
+
+      yTick.append("text")
+        .attr("y", function (d) { return -y(d); })
+        .attr("dy", "0.35em")
+        .attr("fill", "none")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 5)
+        .text(y.tickFormat(5, "s"));
+
+      yTick.append("text")
+        .attr("y", function (d) { return -y(d); })
+        .attr("dy", "0.35em")
+        .text(y.tickFormat(5, "s"));
+
+      yAxis.append("text")
+        .attr("y", function (d) { return -y(y.ticks(5).pop()); })
+        .attr("dy", "-1em")
+        .text("Population");
+
+      var legend = g.append("g")
+        .selectAll("g")
+        .data(data.columns.slice(1).reverse())
+        .enter().append("g")
+        .attr("transform", function (d, i) { return "translate(-40," + (i - (data.columns.length - 1) / 2) * 20 + ")"; });
+
+      legend.append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("fill", z);
+
+      legend.append("text")
+        .attr("x", 24)
+        .attr("y", 9)
+        .attr("dy", "0.35em")
+        .text(function (d) { return d; });
+    });
+  }
+
+</script>

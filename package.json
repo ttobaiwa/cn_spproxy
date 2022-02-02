@@ -1,0 +1,27 @@
+{
+  "name": "express",
+  "version": "1.0.0",
+  "description": "this is a simple EXpressJS application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app",
+    "test": "jest"
+  },
+  "author": "Tariro Tobaiwa",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.7",
+    "axios": "^0.24.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.5",
+    "moment": "^2.29.1",
+    "shelljs": "^0.8.4",
+    "sqlite3": "^5.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.4.4",
+    "nodemon": "^2.0.15"
+  }
+}
