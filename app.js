@@ -3,7 +3,6 @@ const app = express();
 const path = require("path");
 var exphbs = require("express-handlebars");
 const logger = require("./middleware/logger");
-const config = require("./config/app.js");
 const db = require("./services/db");
 const moment = require("moment");
 
@@ -21,7 +20,9 @@ app.set("view engine", "handlebars");
 /* Home page route  */
 app.get("/", (req, res) => {
   res.render("index", {
-    title: "Centerprise CI/CD pipeline",
+    title: "scaffold CI/CD pipeline",
+    description:
+      "scaffold is a CI/CD tool that supports rapid software development and publishing. scaffold allows automation across your pipeline, from code building, testing to deployment. You can integrate scaffold with GitLab to create builds when new code lines are committed.",
     version: "v0.1.0",
     uptime: global.SERVER_UP_TIME,
   });
@@ -45,7 +46,7 @@ app.use((err, req, res, next) => {
 });
 
 /* Set port and listen */
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1015;
 app.listen(PORT, function () {
   console.log(`Server started on port ${PORT}.`);
 
@@ -63,5 +64,5 @@ app.listen(PORT, function () {
   global.SERVER_UP_TIME = moment().format();
 
   /* log incident */
-  db.test();
+  db.processPendingTasks();
 });

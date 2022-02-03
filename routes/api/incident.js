@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const dbInst = require("../../services/db");
 
 /* LIST all incidents from a year */
 router.get("/stats/:year", async function (req, res, next) {
@@ -58,7 +57,7 @@ function getIncidents(selectedYear, callback) {
 function getTasks(selectedYear, callback) {
   const db = require("../../services/db").dbConnection();
   db.all(
-    `SELECT date, uuid, status FROM task ORDER BY id`,
+    `SELECT date, systemid, uuid, previous_point_marker, current_point_marker, status FROM task ORDER BY id`,
     [],
     function (err, rows) {
       if (err) {

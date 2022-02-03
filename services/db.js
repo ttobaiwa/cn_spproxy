@@ -1,7 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const moment = require("moment");
 var shell = require("shelljs");
-const system_register = require("../store/system_register");
 
 async function createDatabase() {
   /* create database + tables */
@@ -17,37 +16,6 @@ async function createDatabase() {
 }
 
 /* ---------- TASK LOGS ---------- */
-
-async function createTaskLog(actionLog) {
-  /* create new single log entry */
-
-  let db = dbConnection();
-  db.run(
-    "INSERT INTO task (date, systemid, uuid, previous_point_marker, current_point_marker, status, attempts) VALUES(?,?,?,?,?,?,0)",
-    [
-      moment().format(),
-      actionLog.systemid,
-      actionLog.uuid,
-      actionLog.previous_point_marker,
-      actionLog.current_point_marker,
-      actionLog.status,
-    ],
-    function (err) {
-      if (err) {
-        return {
-          error: true,
-          message: err.message,
-        };
-      }
-      return {
-        error: false,
-        data: this.lastID,
-      };
-    }
-  );
-  db.close();
-}
-
 async function updateTaskLog(actionLog) {
   /* update single log entry */
 
@@ -71,47 +39,6 @@ async function updateTaskLog(actionLog) {
   db.close();
 }
 
-async function listTaskLog(selectedSystemId, selectedTaskStatus) {
-  /* get all logs */
-
-  let sql =
-    selectedSystemId.length > 0
-      ? `SELECT date, systemid, uuid, previous_point_marker, current_point_marker, status FROM task WHERE systemid = '${selectedSystemId}'`
-      : `SELECT date, systemid, uuid, previous_point_marker, current_point_marker, status FROM task WHERE status = '${selectedTaskStatus}' ORDER BY id`;
-
-  let db = dbConnection();
-  var message = [];
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      //throw err.message;
-      message = {
-        error: true,
-        message: err.message,
-      };
-      return message;
-    }
-
-    if (rows.length > 0) {
-      console.log("some rows");
-      message = {
-        error: false,
-        data: rows,
-      };
-      return message;
-    } else {
-      console.log("no rows");
-      message = {
-        error: true,
-        message: "no records found",
-      };
-      return message;
-    }
-  });
-
-  console.log("done");
-  db.close();
-}
-
 async function processPendingTasks() {
   let sql = `SELECT date, systemid, uuid, previous_point_marker, current_point_marker, status FROM task WHERE status = 'pending' AND attempts < 3 ORDER BY id`;
   let db = dbConnection();
@@ -122,11 +49,9 @@ async function processPendingTasks() {
     }
 
     if (rows.length > 0) {
+      const system_register = require("../store/system_register");
       rows.forEach((task) => {
         console.log("task => ", task);
-        // systemid
-        // uuid:
-
         const system_detail = searchInArray(
           system_register,
           ["id"],
@@ -158,7 +83,6 @@ async function processPendingTasks() {
 }
 
 /* ---------- INCIDENT LOGS ---------- */
-
 async function createIncidentLog(incidentLog) {
   /* create new single log entry */
 
@@ -187,42 +111,6 @@ async function createIncidentLog(incidentLog) {
   db.close();
 }
 
-async function listIncidentLogs(selectedYear) {
-  /* get all logs */
-
-  let sql = `SELECT date, description, source, severity FROM incident ORDER BY id`;
-  let db = dbConnection();
-  var message = [];
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      //throw err.message;
-      message = {
-        error: true,
-        message: err.message,
-      };
-      return message;
-    }
-    if (rows.length > 0) {
-      console.log("some rows");
-      message = {
-        error: false,
-        data: rows,
-      };
-      return message;
-    } else {
-      console.log("no rows");
-      message = {
-        error: true,
-        message: "no records found",
-      };
-      return message;
-    }
-  });
-
-  console.log("done");
-  db.close();
-}
-
 /* ---------- AUXILARY FUNCTIONS ---------- */
 function dbConnection() {
   return new sqlite3.Database(
@@ -247,13 +135,8 @@ const searchInArray = (haystack, criteria, needle) => {
 };
 
 module.exports = {
-  createTaskLog,
-  updateTaskLog,
-  listTaskLog,
-  checkForPendingTasks: processPendingTasks,
+  processPendingTasks,
   createIncidentLog,
-  listIncidentLogs,
   createDatabase,
   dbConnection,
-  test: processPendingTasks,
 };

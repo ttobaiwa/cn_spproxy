@@ -1,7 +1,7 @@
 {
-  "name": "express",
-  "version": "1.0.0",
-  "description": "this is a simple EXpressJS application",
+  "name": "scaffold",
+  "version": "0.1.0",
+  "description": "scaffold is a CI/CD tool that supports rapid software development and publishing. scaffold allows automation across your pipeline, from code building, testing to deployment. You can integrate scaffold with GitLab to create builds when new code lines are committed.",
   "main": "app.js",
   "scripts": {
     "start": "node app",

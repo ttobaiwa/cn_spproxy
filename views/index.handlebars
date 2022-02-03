@@ -10,64 +10,74 @@
     <div class="container col-xxl-12 px-0 py-1">
       <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
         <div class="col-lg-12">
-          <h1 class="display-5 fw-bold lh-1 mb-3">Perfomance Overview</h1>
-          <p><small>Quickly and easily get started with Bootstrap's compiled,
-              production-ready<br> files with this barebones example featuring some basic
-              HTML and helpful<br> links. Download all our examples to get started.</small></p>
-
+          <h1 class="display-5 fw-bold lh-1 mb-3">Deployment Overview</h1>
+          <p><small>
+              scaffold is a CI/CD tool that supports rapid software development and publishing.<br> scaffold
+              allows automation across the user’s pipeline, from code building, testing to deployment.<br> You can
+              integrate
+              scaffold with GitLab to create builds when new code lines are committed.
+            </small></p>
           <div class="mb-5">
-
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
               id="heatmap-5-wkday">
-
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="yearSelected(2021)"
-                autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio3">2021</label>
-
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio4" onclick="yearSelected(2022)"
-                autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="btnradio4">2022</label>
             </div>
-
             <div class="row my-4">
               <div class="col">
                 <div id="heatmap-5"></div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row g-5">
-
-      <div class="container px-4 py-5" id="icon-grid">
-        <h1 class="display-5 fw-bold lh-1 mb-3">Deployment History</h1>
-        <hr>
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-          <div class="col d-flex align-items-start">
-            <div>
-              <h5 class="fw-bold mb-0" id="timeLapsed">00:00:00</h5>
-              <p><small>Uptime</small></p>
+          <h5 class="fw-bold mb-0">Summary</h5><br>
+          <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">
+                  <strong>Deployments</strong>
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"><small>Date</small></th>
+                        <th scope="col"><small>System</small></th>
+                        <th scope="col"><small>Markers</small></th>
+                        <th scope="col"><small>Status</small></th>
+                      </tr>
+                    </thead>
+                    <tbody id="taskReport">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col d-flex align-items-start">
-            <div>
-              <h5 class="fw-bold mb-0">{{version}}</h5>
-              <p><small>Version</small></p>
-            </div>
-          </div>
-          <div class="col d-flex align-items-start">
-            <div>
-              <h5 class="fw-bold mb-0">Featured title</h5>
-              <p><small>Paragraph of text beneath the heading to explain the heading.</small></p>
-            </div>
-          </div>
-          <div class="col d-flex align-items-start">
-            <div>
-              <h5 class="fw-bold mb-0">Featured title</h5>
-              <p><small>Paragraph of text beneath the heading to explain the heading.</small></p>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <strong>Incidents</strong>
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"><small>Date</small></th>
+                        <th scope="col"><small>Description</small></th>
+                        <th scope="col"><small>Source</small></th>
+                        <th scope="col"><small>Severity</small></th>
+                      </tr>
+                    </thead>
+                    <tbody id="incidentReport">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -75,19 +85,20 @@
     </div>
   </main>
   <footer class="pt-2 my-5 text-muted border-top">
-    <small>Created by Tariro Tobaiwa &middot; &copy; 2021</small>
+    <small>Created by Tariro Tobaiwa &middot; &copy; 2021 &middot; Uptime : <span id="timeLapsed">00:00:00</span>
+      &middot; Version : <sspan>{{version}}</span> </small>
   </footer>
 </div>
 
 <script>
-  d3.select("p").style("color", "green");
   setInterval("timeLapsed()", 1000);
   window.onload = timeLapsed();
 
   var currentYear = new Date().getFullYear();
-  yearSelected(currentYear);
-
   var selectedMonth = new Date().getMonth();
+  var currentYearData = [];
+  setupYearToggles(currentYear);
+  yearSelected(currentYear);
 
   function timeLapsed() {
     const then = moment(`{{uptime}}`);
@@ -97,15 +108,18 @@
   }
 
   function yearSelected(selectedYear) {
+    //https://tracksheet.co.uk/pipeline/api/incident/stats/
+    currentYearData = []; currentYear = selectedYear; selectedMonthToProcess('Jan');
     $.ajax({
       type: "get", url:
-        "https://tracksheet.co.uk/pipeline/api/incident/stats/" + selectedYear, datatype: "json", success: function
+        "http://localhost:1015/api/incident/stats/" + selectedYear, datatype: "json", success: function
           (resp) {
           if (!resp.error) {
 
             var incidents = [];
             var tasks = [];
             var date_pos_track = [];
+            currentYearData = resp.data;
 
             const monthNames = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
@@ -156,14 +170,70 @@
     }
   });
 
-
   function daysInMonth(month, year) {
     return new Date(year, month, 0).getDate();
   }
 
   function getMonthPos(selectedMonth) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return monthNames.indexOf(selectedMonth);
+    return (monthNames.indexOf(selectedMonth) + 1).pad();
   }
+
+  function selectedMonthToProcess(selectedMonth) {
+    if (currentYearData.length != 0) {
+
+      // incidents
+      var incidentReport = '';
+      for (i = 0; i < currentYearData.incidents.length; i++) {
+        const current_date = currentYearData.incidents[i].date.slice(0, 7);
+        if (currentYear + '-' + getMonthPos(selectedMonth) === currentYearData.incidents[i].date.slice(0, 7)) {
+          incidentReport = incidentReport + `<tr>
+                        <td><small>`+ currentYearData.incidents[i].date + `</small></td>
+                        <td><small>`+ currentYearData.incidents[i].description + `</small></td>
+                        <td><small>`+ currentYearData.incidents[i].source + `</small></td>
+                        <td><small>`+ currentYearData.incidents[i].severity + `</small></td>
+                      </tr>`;
+
+        }
+      }
+      document.getElementById("incidentReport").innerHTML = incidentReport;
+
+      // tasks
+      var taskReport = '';
+      for (i = 0; i < currentYearData.tasks.length; i++) {
+        const current_date = currentYearData.tasks[i].date.slice(0, 7);
+        if (currentYear + '-' + getMonthPos(selectedMonth) === currentYearData.tasks[i].date.slice(0, 7)) {
+          taskReport = taskReport + `<tr>
+                        <td><small>`+ currentYearData.tasks[i].date + `</small></td>
+                        <td><small>`+ currentYearData.tasks[i].systemid + `</small></td>
+                        <td><small>`+ currentYearData.tasks[i].previous_point_marker + ' -> ' + currentYearData.tasks[i].current_point_marker + `</small></td>
+                        <td><small>`+ currentYearData.tasks[i].status + `</small></td>
+                      </tr>`;
+
+        }
+      }
+      document.getElementById("taskReport").innerHTML = taskReport;
+    } else {
+      console.log("Array is empty!")
+    }
+  }
+
+  function setupYearToggles(currentYear) {
+    const yearView =
+      `<input type="radio" class="btn-check" name="btnradio" id="btnradio3" onclick="yearSelected(` + (currentYear - 1) + `)"
+                autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3">` + (currentYear - 1) + `</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio4" onclick="yearSelected(` + currentYear + `)"
+                autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio4">` + currentYear + `</label>`;
+    document.getElementById("heatmap-5-wkday").innerHTML = yearView;
+  }
+
+  Number.prototype.pad = function (size) {
+    var s = String(this);
+    while (s.length < (size || 2)) { s = "0" + s; }
+    return s;
+  }
+
 
 </script>
