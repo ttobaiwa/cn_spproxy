@@ -20,9 +20,9 @@ app.set("view engine", "handlebars");
 /* Home page route  */
 app.get("/", (req, res) => {
   res.render("index", {
-    title: "scaffold CI/CD pipeline",
+    title: "CareNotes+",
     description:
-      "scaffold is a CI/CD tool that supports rapid software development and publishing. scaffold allows automation across your pipeline, from code building, testing to deployment. You can integrate scaffold with GitLab to create builds when new code lines are committed.",
+      "CareNote+ is a conduit between CareNotes and SharePoint",
     version: "v0.1.0",
     uptime: global.SERVER_UP_TIME,
   });
