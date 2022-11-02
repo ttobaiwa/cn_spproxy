@@ -85,7 +85,7 @@
     </div>
   </main>
   <footer class="pt-2 my-5 text-muted border-top">
-    <small>Created by Tariro Tobaiwa &middot; &copy; 2021 &middot; Uptime : <span id="timeLapsed">00:00:00</span>
+    <small>Created by Tariro Tobaiwa &middot; &copy; 2022 &middot; Uptime : <span id="timeLapsed">00:00:00</span>
       &middot; Version : <sspan>{{version}}</span> </small>
   </footer>
 </div>
@@ -112,7 +112,7 @@
     currentYearData = []; currentYear = selectedYear; selectedMonthToProcess('Jan');
     $.ajax({
       type: "get", url:
-        "http://localhost:1015/api/incident/stats/" + selectedYear, datatype: "json", success: function
+        "https://carenotesplus.herokuapp.com/api/incident/stats/" + selectedYear, datatype: "json", success: function
           (resp) {
           if (!resp.error) {
 
