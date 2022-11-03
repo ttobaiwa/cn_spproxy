@@ -1,17 +1,24 @@
 const express = require("express");
 const router = express.Router();
+import dotenv from 'dotenv';
+dotenv.config();
 
 /* LIST all incidents from a year */
-router.get("/stats/:year", async function (req, res, next) {
-  getIncidents(req.params.year, function (err, result1) {
-    if (err) {
+router.get("/stats/:apiKey/:year", async function (req, res, next) {
+  if (req.params.apiKey != process.env.API_KEY) { // check for API Key
+    res.status(400).json({
+      error: true,
+      message: "Invalid API Key",
+    });
+    return;
+  } else {
+    if (!req.params.year.toString().match(/^[0-9]{4}$/g)) {
       res.status(400).json({
         error: true,
-        message: err.message,
+        message: "Invalid value for a year",
       });
-      return;
     } else {
-      getTasks(req.params.year, function (err, result2) {
+      getIncidents(req.params.year, function (err, result1) {
         if (err) {
           res.status(400).json({
             error: true,
@@ -19,15 +26,25 @@ router.get("/stats/:year", async function (req, res, next) {
           });
           return;
         } else {
-          res.status(200).json({
-            error: false,
-            data: { incidents: result1, tasks: result2 },
+          getTasks(req.params.year, function (err, result2) {
+            if (err) {
+              res.status(400).json({
+                error: true,
+                message: err.message,
+              });
+              return;
+            } else {
+              res.status(200).json({
+                error: false,
+                data: { incidents: result1, tasks: result2 },
+              });
+              return;
+            }
           });
-          return;
         }
       });
     }
-  });
+  }
 });
 
 function getIncidents(selectedYear, callback) {

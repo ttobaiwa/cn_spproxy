@@ -7,7 +7,7 @@ async function createDatabase() {
 
   let db = dbConnection();
   db.run(
-    "CREATE TABLE IF NOT EXISTS task (id INTEGER PRIMARY KEY, date TEXT, systemid TEXT, uuid TEXT, previous_point_marker TEXT, current_point_marker TEXT, status TEXT, attempts INTEGER);"
+    "CREATE TABLE IF NOT EXISTS task (id INTEGER PRIMARY KEY, date TEXT, systemid TEXT, uuid TEXT, previous_point_marker TEXT, current_point_marker TEXT, status TEXT, attempts INTEGER, payload_header TEXT, payload TEXT);"
   );
   db.run(
     "CREATE TABLE IF NOT EXISTS incident (id INTEGER PRIMARY KEY, date TEXT, description TEXT, source TEXT, severity TEXT);"

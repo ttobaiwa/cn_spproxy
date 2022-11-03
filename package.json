@@ -18,7 +18,8 @@
     "moment": "^2.29.1",
     "shelljs": "^0.8.4",
     "sqlite3": "^5.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "dotenv": "12.0.3"
   },
   "devDependencies": {
     "jest": "^27.4.4",
