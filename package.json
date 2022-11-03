@@ -8,6 +8,9 @@
     "dev": "nodemon app",
     "test": "jest"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "author": "Tariro Tobaiwa",
   "license": "ISC",
   "dependencies": {
