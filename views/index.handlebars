@@ -5,15 +5,11 @@
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-            aria-selected="true">Home</a>
+            aria-selected="true">Occupancy</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages"
-            aria-selected="false">Messages</a>
+            aria-selected="false">Incidents</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings"
@@ -23,77 +19,82 @@
 
       <!-- Tab panes -->
       <div class="tab-content">
-        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">Home</div>
-        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">Profile</div>
-        <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">Messages</div>
-        <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">Settings</div>
-      </div>
-
-      <div class="row flex-lg-row-reverse align-items-center">
-        <div class="col-lg-12">
-          <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5">
-            <div class="d-flex flex-column align-items-start gap-2">
-              <h3 class="fw-bold">Occupancy</h3>
-              <p class="text-muted"><small>Paragraph of text beneath the heading to explain the heading. We'll add onto
-                  it with
-                  another sentence and probably just keep going until we run out of words.</small></p>
-              <div id="donutchart" style="width: 450px; height: 250px;"></div>
-            </div>
-            <div class="row row-cols-1 row-cols-sm-2 g-4">
-              <div class="d-flex flex-column gap-2">
-                <h3 class="fw-semibold mb-0">100</h3>
-                <p class="text-muted"><small>Occupancy (%)</small></p>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <h3 class="fw-semibold mb-0">34</h3>
-                <p class="text-muted"><small>Available Rooms</small></p>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <h3 class="fw-semibold mb-0">33</h3>
-                <p class="text-muted"><small>Overdue for Review</small></p>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <h3 class="fw-semibold mb-0">56</h3>
-                <p class="text-muted"><small>Average Overdue for Review per patient</small></p>
-              </div>
-            </div>
-          </div>
-          <h3>Incidents</h3>
-          <p><small>scaffold is a CI/CD tool that supports rapid software development and publishing.</small>
-          </p>
-          <div class="mb-5">
-            <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5">
-              <div class="d-flex flex-column align-items-start gap-2">
-                <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
-                  id="heatmap-5-wkday">
+        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row flex-lg-row-reverse align-items-center">
+            <div class="col-lg-12">
+              <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5">
+                <div class="d-flex flex-column align-items-start gap-2">
+                  <h3 class="fw-bold">Occupancy</h3>
+                  <p class="text-muted"><small>Paragraph of text beneath the heading to explain the heading. We'll add
+                      onto
+                      it with
+                      another sentence and probably just keep going until we run out of words.</small></p>
+                  <div id="donutchart" style="width: 450px; height: 250px;"></div>
                 </div>
-                <div class="row my-4">
-                  <div class="col">
-                    <div id="heatmap-5"></div>
+                <div class="row row-cols-1 row-cols-sm-2 g-4">
+                  <div class="d-flex flex-column gap-2">
+                    <h3 class="fw-semibold mb-0">100</h3>
+                    <p class="text-muted"><small>Occupancy (%)</small></p>
                   </div>
-                </div>
-              </div>
-              <div class="row row-cols-1 row-cols-sm-2 g-4">
-                <div class="d-flex flex-column gap-2">
-                  <h3 class="fw-semibold mb-0">100</h3>
-                  <p class="text-muted"><small>Occupancy (%)</small></p>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                  <h3 class="fw-semibold mb-0">34</h3>
-                  <p class="text-muted"><small>Available Rooms</small></p>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                  <h3 class="fw-semibold mb-0">33</h3>
-                  <p class="text-muted"><small>Overdue for Review</small></p>
-                </div>
-                <div class="d-flex flex-column gap-2">
-                  <h3 class="fw-semibold mb-0">56</h3>
-                  <p class="text-muted"><small>Average Overdue for Review per patient</small></p>
+                  <div class="d-flex flex-column gap-2">
+                    <h3 class="fw-semibold mb-0">34</h3>
+                    <p class="text-muted"><small>Available Rooms</small></p>
+                  </div>
+                  <div class="d-flex flex-column gap-2">
+                    <h3 class="fw-semibold mb-0">33</h3>
+                    <p class="text-muted"><small>Overdue for Review</small></p>
+                  </div>
+                  <div class="d-flex flex-column gap-2">
+                    <h3 class="fw-semibold mb-0">56</h3>
+                    <p class="text-muted"><small>Average Overdue for Review per patient</small></p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="row flex-lg-row-reverse align-items-center">
+            <div class="col-lg-12">
+              <h3>Incidents</h3>
+              <p><small>scaffold is a CI/CD tool that supports rapid software development and publishing.</small>
+              </p>
+              <div class="mb-5">
+                <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5">
+                  <div class="d-flex flex-column align-items-start gap-2">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group"
+                      id="heatmap-5-wkday">
+                    </div>
+                    <div class="row my-4">
+                      <div class="col">
+                        <div id="heatmap-5"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row row-cols-1 row-cols-sm-2 g-4">
+                    <div class="d-flex flex-column gap-2">
+                      <h3 class="fw-semibold mb-0">100</h3>
+                      <p class="text-muted"><small>Occupancy (%)</small></p>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                      <h3 class="fw-semibold mb-0">34</h3>
+                      <p class="text-muted"><small>Available Rooms</small></p>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                      <h3 class="fw-semibold mb-0">33</h3>
+                      <p class="text-muted"><small>Overdue for Review</small></p>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                      <h3 class="fw-semibold mb-0">56</h3>
+                      <p class="text-muted"><small>Average Overdue for Review per patient</small></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">Settings</div>
       </div>
     </div>
   </header>
