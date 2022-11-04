@@ -56,16 +56,20 @@
 
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
-        ['Year', 'Sales', 'Expenses', 'Profit'],
-        ['2014', 1000, 400, 200],
-        ['2015', 1170, 460, 250],
-        ['2016', 660, 1120, 300],
-        ['2017', 1030, 540, 350]
+        ['Ward', 'Occupancy (%)', 'Available Beds', 'Overdue for Review'],
+        ['Courtyard', 1000, 400, 200],
+        ['Cowdray LWS', 1170, 460, 250],
+        ['Goodwood Ward LWS', 660, 1120, 300],
+        ['Oak Low Secure', 1030, 540, 350],
+        ['Park House LWS', 1030, 540, 350],
+        ['Petworth LWS', 1030, 540, 350],
+        ['Sycamore Low Secure', 1030, 540, 350],
+        ['Willow Low secure', 1030, 540, 350]
       ]);
 
       var options = {
         chart: {
-          title: 'Company Performance',
+          title: 'Bed Occupancy',
           subtitle: 'Sales, Expenses, and Profit: 2014-2017',
         },
         bars: 'horizontal', // Required for Material Bar Charts.
