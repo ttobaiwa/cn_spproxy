@@ -5,15 +5,15 @@
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-            aria-selected="true">Occupancy</a>
+            aria-selected="true"><small>Occupancy</small></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-            aria-selected="false">Incidents</a>
+            aria-selected="false"><small>Incidents</small></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings"
-            aria-selected="false">Settings</a>
+            aria-selected="false"><small>Settings</small></a>
         </li>
       </ul>
 
@@ -25,11 +25,12 @@
             <div class="row row-cols-1 row-cols-md-2 align-items-md-center">
               <div class="d-flex flex-column align-items-start gap-2">
                 <h3>Occupancy</h3>
-                <p class="text-muted"><small>Paragraph of text beneath the heading to explain the heading. We'll add
-                    onto
-                    it with
-                    another sentence and probably just keep going until we run out of words.</small></p>
-                 <div id="chart_div"></div>
+                <p class="text-muted">
+                    <small>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another
+                      sentence and probably just keep going until we run out of words.
+                    </small>
+                </p>
+                 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
               </div>
               <div class="row row-cols-1 row-cols-sm-2 g-4">
                 <div class="d-flex flex-column gap-2">
