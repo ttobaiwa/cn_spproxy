@@ -263,6 +263,7 @@
         indexLabelFontSize: 12,
         indexLabel: "{label} - #percent%",
         toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+        click: onClick,
         dataPoints: [
           { y: 37, label: "Courtyard" },
           { y: 8, label: "Cowdray LWS" },
@@ -276,4 +277,7 @@
       }]
   });
   chart.render();
+  function onClick(e) {
+		console.log(e);
+	}
 </script>
