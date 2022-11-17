@@ -145,7 +145,6 @@ const searchInArray = (haystack, criteria, needle) => {
 module.exports = {
   processPendingTasks,
   createIncidentLog,
-  createReportEntry,
   createDatabase,
   dbConnection,
 };

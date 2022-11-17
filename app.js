@@ -34,10 +34,10 @@ app.use(express.static(path.join(__dirname, "public")));
 /* tasks route */
 app.use("/api/task", require("./routes/api/task"));
 
-/* reports route */
+/* incidents route */
 app.use("/api/incident", require("./routes/api/incident"));
 
-/* incidents route */
+/* reports route */
 app.use("/api/report", require("./routes/api/report"));
 
 /* Error handler middleware */
