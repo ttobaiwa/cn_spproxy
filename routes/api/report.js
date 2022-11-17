@@ -93,7 +93,7 @@ router.get("/:reportid", async function (req, res, next) {
 });
 
 /* POST NEW report */
-router.post("/", async function (req, res, next) {
+router.post("/new", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     const moment = require("moment");
