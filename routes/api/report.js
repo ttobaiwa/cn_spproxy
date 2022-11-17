@@ -11,7 +11,7 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     let searchQuery = "";
-    if (req.params.reportid === "latest" || req.params.reportid === "latest") {
+    if (req.params.reportid === "latest" || req.params.reportid === "all") {
       let searchQueryType =
         req.params.type !== "" && req.params.type !== undefined
           ? `type = '${req.params.type}'`
