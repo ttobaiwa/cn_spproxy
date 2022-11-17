@@ -25,9 +25,23 @@ router.get("/all", async function (req, res, next) {
         }
         if (rows.length > 0) {
           console.log("found something");
+
+          let parsedRows = [];
+          rows.forEach(myFunction);
+
+          function myFunction(item, index) {
+            parsedRows.push({
+              id: item.id,
+              summary: item.summary,
+              content: JSON.parse(item.content),
+              type: item.type,
+              source: item.source,
+            });
+          }
+
           res.status(200).json({
             error: false,
-            data: rows,
+            data: parsedRows,
           });
           db.close();
           return;
