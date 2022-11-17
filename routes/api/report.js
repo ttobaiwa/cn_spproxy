@@ -11,8 +11,7 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     let searchQuery = "";
-    if (req.params.reportid === "latest") {
-      // get the latest
+    if (req.params.reportid === "latest" || req.params.reportid === "latest") {
       let searchQueryType =
         req.params.type !== "" && req.params.type !== undefined
           ? `type = '${req.params.type}'`
@@ -32,9 +31,12 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
           searchQuery = ` WHERE ${searchQuerySource}`;
         }
       }
-      searchQuery = `${searchQuery} ORDER BY id DESC LIMIT 1`;
-    } else if (req.params.reportid === "all") {
-      searchQuery = ` ORDER BY id DESC`;
+
+      if (req.params.reportid === "all") {
+        searchQuery = `${searchQuery} ORDER BY id DESC`;  // returns all + criteria
+      } else {
+        searchQuery = `${searchQuery} ORDER BY id DESC LIMIT 1`; // returns only one + criteria
+      }
     } else {
       // search by id
       searchQuery = ` WHERE id = '${req.params.reportid}' `;
