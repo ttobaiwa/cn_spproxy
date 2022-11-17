@@ -7,55 +7,79 @@ const router = express.Router();
 */
 
 /* GET single reports */
-router.get("/:reportid", async function (req, res, next) {
+router.get("/:reportid/:type/:source", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
-    const searchQuery = (req.params.reportid === "all") ? "" : ` WHERE id = '${req.params.reportid}' `;
-    db.all(
-      `SELECT date, summary, content, type, source FROM reports ${searchQuery} ORDER BY id`,
-      [],
-      (err, rows) => {
-        if (err) {
-          //throw err.message;
-          res.status(400).json({
-            error: true,
-            message: err.message,
-          });
-          db.close();
-          return;
+    let searchQuery = "";
+    if (req.params.reportid === "latest") {
+      // get the latest
+      let searchQueryType =
+        req.params.type !== "" ? `type = '${req.params.type}'` : "";
+      let searchQuerySource =
+        req.params.source !== "" ? `source = '${req.params.source}'` : "";
+
+      if (searchQueryType !== "") {
+        searchQuery = ` WHERE ${searchQueryType}`;
+        if (searchQuerySource !== "") {
+          searchQuery = `${searchQuery} AND ${searchQuerySource}`;
         }
-        if (rows.length > 0) {
-          console.log("found something");
-          let parsedRows = [];
-          rows.forEach(myFunction);
-
-          function myFunction(item, index) {
-            parsedRows.push({
-              id: item.id,
-              summary: item.summary,
-              content: JSON.parse(item.content),
-              type: item.type,
-              source: item.source,
-            });
-          }
-
-          res.status(200).json({
-            error: false,
-            data: parsedRows,
-          });
-          db.close();
-          return;
-        } else {
-          console.log("no rows");
-          res.status(400).json({
-            error: true,
-            message: "no report(s) found",
-          });
-          db.close();
-          return;
+      } else {
+        if (searchQuerySource !== "") {
+          searchQuery = ` WHERE ${searchQuerySource}`;
         }
       }
-    );
+      searchQuery = `${searchQuery} ORDER BY id DESC LIMIT 1`;
+    } else if (req.params.reportid === "all") {
+      searchQuery = ` ORDER BY id DESC`;
+    } else {
+      // search by id
+      searchQuery = ` WHERE id = '${req.params.reportid}' `;
+    }
+
+    searchQuery = `SELECT date, summary, content, type, source FROM reports ${searchQuery}`;
+    db.all(searchQuery, [], (err, rows) => {
+      if (err) {
+        //throw err.message;
+        res.status(400).json({
+          error: true,
+          message: err.message,
+          query: searchQuery,
+        });
+        db.close();
+        return;
+      }
+      if (rows.length > 0) {
+        console.log("found something");
+        let parsedRows = [];
+        rows.forEach(myFunction);
+
+        function myFunction(item, index) {
+          parsedRows.push({
+            id: item.id,
+            summary: item.summary,
+            content: JSON.parse(item.content),
+            type: item.type,
+            source: item.source,
+            query: searchQuery,
+          });
+        }
+
+        res.status(200).json({
+          error: false,
+          data: parsedRows,
+        });
+        db.close();
+        return;
+      } else {
+        console.log("no rows");
+        res.status(400).json({
+          error: true,
+          message: "no report(s) found",
+        });
+        db.close();
+        return;
+      }
+    });
   } catch (err) {
     console.error(`Error while fetching report list`, err.message);
     res.status(400).json({ error: true, message: err.message });
