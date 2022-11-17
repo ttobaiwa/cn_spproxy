@@ -12,6 +12,14 @@ async function createDatabase() {
   db.run(
     "CREATE TABLE IF NOT EXISTS incident (id INTEGER PRIMARY KEY, date TEXT, description TEXT, source TEXT, severity TEXT);"
   );
+  db.run(
+    "CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY, date TEXT, summary TEXT, content TEXT, type TEXT, source TEXT);"
+    /* 
+       source => [carenotes, ulysses, other]
+       type => [occupancy, incident, other]
+       reports: date, summary, content, type, source
+    */
+  );
   db.close();
 }
 
@@ -137,6 +145,7 @@ const searchInArray = (haystack, criteria, needle) => {
 module.exports = {
   processPendingTasks,
   createIncidentLog,
+  createReportEntry,
   createDatabase,
   dbConnection,
 };

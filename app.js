@@ -34,8 +34,11 @@ app.use(express.static(path.join(__dirname, "public")));
 /* tasks route */
 app.use("/api/task", require("./routes/api/task"));
 
-/* incidents route */
+/* reports route */
 app.use("/api/incident", require("./routes/api/incident"));
+
+/* incidents route */
+app.use("/api/report", require("./routes/api/report"));
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
@@ -64,5 +67,5 @@ app.listen(PORT, function () {
   global.SERVER_UP_TIME = moment().format();
 
   /* log incident */
-  db.processPendingTasks();
+  // db.processPendingTasks();
 });
