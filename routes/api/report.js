@@ -14,9 +14,13 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
     if (req.params.reportid === "latest") {
       // get the latest
       let searchQueryType =
-        req.params.type !== "" ? `type = '${req.params.type}'` : "";
+        req.params.type !== "" && req.params.type !== undefined
+          ? `type = '${req.params.type}'`
+          : "";
       let searchQuerySource =
-        req.params.source !== "" ? `source = '${req.params.source}'` : "";
+        req.params.source !== "" && req.params.source !== undefined
+          ? `source = '${req.params.source}'`
+          : "";
 
       if (searchQueryType !== "") {
         searchQuery = ` WHERE ${searchQueryType}`;
