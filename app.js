@@ -13,6 +13,13 @@ app.use(logger);
 app.use(express.json()); // body parser
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+})
+
 /* Handlebars middleware  */
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
@@ -21,8 +28,7 @@ app.set("view engine", "handlebars");
 app.get("/", (req, res) => {
   res.render("index", {
     title: "CareNotes+",
-    description:
-      "CareNote+ is a conduit between CareNotes and SharePoint",
+    description: "CareNote+ is a conduit between CareNotes and SharePoint",
     version: "v0.1.0",
     uptime: global.SERVER_UP_TIME,
   });
