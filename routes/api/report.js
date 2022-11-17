@@ -42,7 +42,7 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
       searchQuery = ` WHERE id = '${req.params.reportid}' `;
     }
 
-    searchQuery = `SELECT date, summary, content, type, source FROM reports ${searchQuery}`;
+    searchQuery = `SELECT id, date, summary, content, type, source FROM reports ${searchQuery}`;
     db.all(searchQuery, [], (err, rows) => {
       if (err) {
         //throw err.message;
