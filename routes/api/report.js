@@ -60,13 +60,13 @@ router.get("/:reportid/:type/:source", async function (req, res, next) {
             content: JSON.parse(item.content),
             type: item.type,
             source: item.source,
-            query: searchQuery,
           });
         }
 
         res.status(200).json({
           error: false,
           data: parsedRows,
+          query: searchQuery,
         });
         db.close();
         return;
@@ -75,6 +75,7 @@ router.get("/:reportid/:type/:source", async function (req, res, next) {
         res.status(400).json({
           error: true,
           message: "no report(s) found",
+          query: searchQuery,
         });
         db.close();
         return;
