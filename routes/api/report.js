@@ -11,7 +11,7 @@ router.get("/all", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     db.all(
-      `SELECT date, summary, content, type, source FROM reports ORDER BY id`,
+      `SELECT id, date, summary, content, type, source FROM reports ORDER BY id`,
       [],
       (err, rows) => {
         if (err) {
