@@ -6,12 +6,13 @@ const router = express.Router();
     reports: date, summary, content, type, source
 */
 
-/* LIST all reports */
-router.get("/all", async function (req, res, next) {
+/* GET single reports */
+router.get("/:reportid", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
+    const searchQuery = (req.params.reportid === "all") ? "" : ` WHERE id = '${req.params.reportid}' `;
     db.all(
-      `SELECT id, date, summary, content, type, source FROM reports ORDER BY id`,
+      `SELECT date, summary, content, type, source FROM reports ${searchQuery} ORDER BY id`,
       [],
       (err, rows) => {
         if (err) {
@@ -25,7 +26,6 @@ router.get("/all", async function (req, res, next) {
         }
         if (rows.length > 0) {
           console.log("found something");
-
           let parsedRows = [];
           rows.forEach(myFunction);
 
@@ -42,49 +42,6 @@ router.get("/all", async function (req, res, next) {
           res.status(200).json({
             error: false,
             data: parsedRows,
-          });
-          db.close();
-          return;
-        } else {
-          console.log("no rows");
-          res.status(400).json({
-            error: true,
-            message: "no report(s) found",
-          });
-          db.close();
-          return;
-        }
-      }
-    );
-  } catch (err) {
-    console.error(`Error while fetching report list`, err.message);
-    res.status(400).json({ error: true, message: err.message });
-    next(err);
-  }
-});
-
-/* GET single report */
-router.get("/:reportid", async function (req, res, next) {
-  try {
-    const db = require("../../services/db").dbConnection();
-    db.all(
-      `SELECT date, summary, content, type, source FROM reports WHERE id = '${req.params.reportid}' ORDER BY id`,
-      [],
-      (err, rows) => {
-        if (err) {
-          //throw err.message;
-          res.status(400).json({
-            error: true,
-            message: err.message,
-          });
-          db.close();
-          return;
-        }
-        if (rows.length > 0) {
-          console.log("found something");
-          res.status(200).json({
-            error: false,
-            data: rows,
           });
           db.close();
           return;
