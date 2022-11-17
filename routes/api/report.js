@@ -7,7 +7,7 @@ const router = express.Router();
 */
 
 /* GET single reports */
-router.get("/:reportid/:type/:source", async function (req, res, next) {
+router.get("/:reportid/:type?/:source?", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     let searchQuery = "";
