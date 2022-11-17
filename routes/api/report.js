@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 /* 
-       source => [carenotes, ulysses, other]
-       type => [occupancy, incident, other]
-       reports: date, summary, content, type, source
-    */
+    source => [carenotes, ulysses, other]
+    type => [occupancy, incident, other]
+    reports: date, summary, content, type, source
+*/
 
 /* LIST all reports */
 router.get("/all", async function (req, res, next) {
@@ -98,7 +98,7 @@ router.post("/new", async function (req, res, next) {
     const db = require("../../services/db").dbConnection();
     const moment = require("moment");
     db.run(
-      `INSERT INTO report (date, summary, content, type, source) VALUES(?,?,?,?,?)`,
+      `INSERT INTO reports (date, summary, content, type, source) VALUES(?,?,?,?,?)`,
       [
         moment().format(),
         req.body.summary,
