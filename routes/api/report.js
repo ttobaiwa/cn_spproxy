@@ -115,7 +115,7 @@ router.post("/new", async function (req, res, next) {
           .trim();
         scrubbedItem.push({ [parsedKey]: parsedValue });
       }
-      parsedRows.push(scrubbedItem[0]);
+      parsedRows.push(scrubbedItem);
     }
 
     const moment = require("moment");
