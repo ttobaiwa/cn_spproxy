@@ -33,7 +33,7 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
       }
 
       if (req.params.reportid === "all") {
-        searchQuery = `${searchQuery} ORDER BY id DESC`;  // returns all + criteria
+        searchQuery = `${searchQuery} ORDER BY id DESC`; // returns all + criteria
       } else {
         searchQuery = `${searchQuery} ORDER BY id DESC LIMIT 1`; // returns only one + criteria
       }
@@ -98,15 +98,33 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
 router.post("/new", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
-    let scrubbedContent = req.body.content;
-    scrubbedContent = scrubbedContent.replace(/[\r\n]/gm, '');
+    // scrub content
+    let payload = req.body.content;
+    let parsedRows = [];
+    JSON.parse(payload.content).forEach(scrubContents);
+    function scrubContents(item, index) {
+      let scrubbedItem = [];
+      for (const [key, value] of Object.entries(item)) {
+        const parsedKey = key
+          .replace(/[\r\n]/gm, "")
+          .replaceAll("  ", "")
+          .trim();
+        const parsedValue = value
+          .replace(/[\r\n]/gm, "")
+          .replaceAll("  ", "")
+          .trim();
+        scrubbedItem.push({ parsedKey: parsedValue });
+      }
+      parsedRows.push(scrubbedItem);
+    }
+
     const moment = require("moment");
     db.run(
       `INSERT INTO reports (date, summary, content, type, source) VALUES(?,?,?,?,?)`,
       [
         moment().format(),
         req.body.summary,
-        scrubbedContent,
+        JSON.stringify(parsedRows),
         req.body.type,
         req.body.source,
       ],
