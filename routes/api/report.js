@@ -103,7 +103,7 @@ router.post("/new", async function (req, res, next) {
     let parsedRows = [];
     JSON.parse(req.body.content).forEach(scrubContents);
     function scrubContents(item, index) {
-      let scrubbedItem = [];
+      let scrubbedItem = {};
       for (const [key, value] of Object.entries(item)) {
         const parsedKey = key
           .replace(/[\r\n]/gm, "")
@@ -113,7 +113,7 @@ router.post("/new", async function (req, res, next) {
           .replace(/[\r\n]/gm, "")
           .replaceAll("  ", "")
           .trim();
-        scrubbedItem.push({ [parsedKey]: parsedValue });
+        scrubbedItem = Object.assign(scrubbedItem, { [parsedKey]: parsedValue });
       }
       parsedRows.push(scrubbedItem);
     }
