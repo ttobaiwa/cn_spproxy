@@ -99,9 +99,9 @@ router.post("/new", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
     // scrub content
-    let payload = req.body.content;
+    // let payload = req.body.content;
     let parsedRows = [];
-    JSON.parse(payload.content).forEach(scrubContents);
+    JSON.parse(req.body.content).forEach(scrubContents);
     function scrubContents(item, index) {
       let scrubbedItem = [];
       for (const [key, value] of Object.entries(item)) {
