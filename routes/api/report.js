@@ -98,13 +98,15 @@ router.get("/:reportid/:type?/:source?", async function (req, res, next) {
 router.post("/new", async function (req, res, next) {
   try {
     const db = require("../../services/db").dbConnection();
+    let scrubbedContent = req.body.content;
+    scrubbedContent = scrubbedContent.replace(/[\r\n]/gm, '');
     const moment = require("moment");
     db.run(
       `INSERT INTO reports (date, summary, content, type, source) VALUES(?,?,?,?,?)`,
       [
         moment().format(),
         req.body.summary,
-        req.body.content,
+        scrubbedContent,
         req.body.type,
         req.body.source,
       ],
