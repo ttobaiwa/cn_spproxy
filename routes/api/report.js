@@ -113,7 +113,7 @@ router.post("/new", async function (req, res, next) {
           .replace(/[\r\n]/gm, "")
           .replaceAll("  ", "")
           .trim();
-        scrubbedItem.push({ parsedKey: parsedValue });
+        scrubbedItem.push({ [parsedKey]: parsedValue });
       }
       parsedRows.push(scrubbedItem);
     }
